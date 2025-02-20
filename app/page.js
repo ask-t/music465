@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { songs } from '@/data/songs';
 import styles from './page.module.css';
+import { courses, getAllSongs, getSongsByCourse } from '@/data/courses';
 
 export default function ClassicQuiz() {
   const [showAnswer, setShowAnswer] = useState(false);
@@ -13,6 +14,7 @@ export default function ClassicQuiz() {
   const [isClient, setIsClient] = useState(false);
   const [playMode, setPlayMode] = useState('intro');
   const [selectedComposers, setSelectedComposers] = useState(['all']);
+  const [selectedCourse, setSelectedCourse] = useState('MUSC465-Unit1');
 
   const composers = ['all', 'Ludwig van Beethoven', 'Franz Schubert', 'Robert Schumann'];
 
@@ -36,11 +38,17 @@ export default function ClassicQuiz() {
 
   const generateNewQuestion = () => {
     const useRandomTime = playMode === 'random';
-    const filteredSongs = selectedComposers.includes('all')
-      ? songs
-      : songs.filter(song => selectedComposers.includes(song.composer));
+    let availableSongs = selectedCourse === 'all' 
+      ? getAllSongs()
+      : getSongsByCourse(selectedCourse);
+
+    if (!selectedComposers.includes('all')) {
+      availableSongs = availableSongs.filter(song => 
+        selectedComposers.includes(song.composer)
+      );
+    }
     
-    const song = filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
+    const song = availableSongs[Math.floor(Math.random() * availableSongs.length)];
     const movement = song.movements[Math.floor(Math.random() * song.movements.length)];
     
     const randomTimeOffset = useRandomTime 
@@ -70,6 +78,34 @@ export default function ClassicQuiz() {
     <div className={styles.container}>
       <h2 className={styles.title}>🎼 クラシック楽曲クイズ 🎼</h2>
       <p className={styles.text}>以下の再生ボタンを押して、曲を聴いてください。作曲家・曲名・楽章を当てましょう！</p>
+
+      <div className={styles.radioGroup}>
+        <p className={styles.groupLabel}>コースを選択：</p>
+        <label className={styles.radioLabel}>
+          <input
+            type="radio"
+            name="course"
+            value="all"
+            checked={selectedCourse === 'all'}
+            onChange={(e) => setSelectedCourse(e.target.value)}
+            className={styles.radioInput}
+          />
+          📚 全てのコース
+        </label>
+        {courses.map(course => (
+          <label key={course.id} className={styles.radioLabel}>
+            <input
+              type="radio"
+              name="course"
+              value={course.id}
+              checked={selectedCourse === course.id}
+              onChange={(e) => setSelectedCourse(e.target.value)}
+              className={styles.radioInput}
+            />
+            📖 {course.name}
+          </label>
+        ))}
+      </div>
 
       <div className={styles.radioGroup}>
         <p className={styles.groupLabel}>作曲家を選択：</p>
