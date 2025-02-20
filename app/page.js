@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { songs } from '@/data/songs';
 import styles from './page.module.css';
-import { courses, getAllSongs, getSongsByCourse } from '@/data/courses';
+import { courses, getAllSongs, getSongsByCourse, getComposersByCourse } from '@/data/courses';
+import { quotes, getRandomQuote } from '@/data/quotes';
 
 export default function ClassicQuiz() {
   const [showAnswer, setShowAnswer] = useState(false);
@@ -15,8 +16,14 @@ export default function ClassicQuiz() {
   const [playMode, setPlayMode] = useState('intro');
   const [selectedComposers, setSelectedComposers] = useState(['all']);
   const [selectedCourse, setSelectedCourse] = useState('MUSC465-Unit1');
+  const [currentQuote, setCurrentQuote] = useState(null);
+  const [expandedSections, setExpandedSections] = useState({
+    course: false,
+    composer: false,
+    playMode: false
+  });
 
-  const composers = ['all', 'Ludwig van Beethoven', 'Franz Schubert', 'Robert Schumann'];
+  const composers = getComposersByCourse(selectedCourse);
 
   const handleComposerChange = (composer) => {
     if (composer === 'all') {
@@ -28,6 +35,12 @@ export default function ClassicQuiz() {
       
       setSelectedComposers(newSelected.length ? newSelected : ['all']);
     }
+  };
+
+  const handleCourseChange = (courseId) => {
+    setSelectedCourse(courseId);
+    setSelectedComposers(['all']);
+    setCurrentQuote(getRandomQuote(courseId));
   };
 
   const formatTime = (seconds) => {
@@ -65,61 +78,144 @@ export default function ClassicQuiz() {
     setShowAnswer(false);
   };
 
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   useEffect(() => {
     setIsClient(true);
     generateNewQuestion();
+    setCurrentQuote(getRandomQuote(selectedCourse));
   }, []);
 
-  if (!isClient || !randomSong || !randomMovement) {
+  if (!isClient) {
     return <div className={styles.loading}>Loading...</div>;
   }
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>🎼 クラシック楽曲クイズ 🎼</h2>
-      <p className={styles.text}>以下の再生ボタンを押して、曲を聴いてください。作曲家・曲名・楽章を当てましょう！</p>
+      <h2 className={styles.title}>🎼 Keyboard Literature Quiz 🎼</h2>
+      <p className={styles.text}>以下の再生ボタンを押して、曲を聴いてください。作曲家・曲名・楽章を当てましょう🐧🐧🐧</p>
+      <br></br>
+      {isClient && currentQuote && (
+        <div className={styles.quoteContainer}>
+          <p className={styles.quote}>
+            {currentQuote.text}
+          </p>
+          <p className={styles.quoteAuthor}>
+            ― {currentQuote.author}
+          </p>
+        </div>
+      )}
 
-      <div className={styles.radioGroup}>
-        <p className={styles.groupLabel}>コースを選択：</p>
-        <label className={styles.radioLabel}>
-          <input
-            type="radio"
-            name="course"
-            value="all"
-            checked={selectedCourse === 'all'}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className={styles.radioInput}
-          />
-          📚 全てのコース
-        </label>
-        {courses.map(course => (
-          <label key={course.id} className={styles.radioLabel}>
-            <input
-              type="radio"
-              name="course"
-              value={course.id}
-              checked={selectedCourse === course.id}
-              onChange={(e) => setSelectedCourse(e.target.value)}
-              className={styles.radioInput}
-            />
-            📖 {course.name}
-          </label>
-        ))}
+      <div className={styles.accordionSection}>
+        <div 
+          className={styles.accordionHeader}
+          onClick={() => toggleSection('course')}
+        >
+          <span>📚 コースを選択</span>
+          <span className={`${styles.accordionIcon} ${expandedSections.course ? styles.expanded : ''}`}>
+            ▼
+          </span>
+        </div>
+        <div className={`${styles.accordionContent} ${expandedSections.course ? styles.expanded : ''}`}>
+          <div className={styles.radioGroup}>
+            <p className={styles.groupLabel}>コースを選択：</p>
+            <label className={styles.radioLabel}>
+              <input
+                type="radio"
+                name="course"
+                value="all"
+                checked={selectedCourse === 'all'}
+                onChange={(e) => handleCourseChange(e.target.value)}
+                className={styles.radioInput}
+              />
+              📚 全てのコース
+            </label>
+            {courses.map(course => (
+              <label key={course.id} className={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="course"
+                  value={course.id}
+                  checked={selectedCourse === course.id}
+                  onChange={(e) => handleCourseChange(e.target.value)}
+                  className={styles.radioInput}
+                />
+                📖 {course.name}
+              </label>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className={styles.radioGroup}>
-        <p className={styles.groupLabel}>作曲家を選択：</p>
-        {composers.map(composer => (
-          <label key={composer} className={styles.radioLabel}>
-            <input
-              type="checkbox"
-              checked={selectedComposers.includes(composer)}
-              onChange={() => handleComposerChange(composer)}
-              className={styles.radioInput}
-            />
-            {composer === 'all' ? '🎵 全ての作曲家' : `👤 ${composer}`}
-          </label>
-        ))}
+      <div className={styles.accordionSection}>
+        <div 
+          className={styles.accordionHeader}
+          onClick={() => toggleSection('composer')}
+        >
+          <span>👤 作曲家を選択</span>
+          <span className={`${styles.accordionIcon} ${expandedSections.composer ? styles.expanded : ''}`}>
+            ▼
+          </span>
+        </div>
+        <div className={`${styles.accordionContent} ${expandedSections.composer ? styles.expanded : ''}`}>
+          <div className={styles.radioGroup}>
+            <p className={styles.groupLabel}>作曲家を選択：</p>
+            {composers.map(composer => (
+              <label key={composer} className={styles.radioLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedComposers.includes(composer)}
+                  onChange={() => handleComposerChange(composer)}
+                  className={styles.radioInput}
+                />
+                {composer === 'all' ? '🎵 全ての作曲家' : `👤 ${composer}`}
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.accordionSection}>
+        <div 
+          className={styles.accordionHeader}
+          onClick={() => toggleSection('playMode')}
+        >
+          <span>🎵 再生モードを選択</span>
+          <span className={`${styles.accordionIcon} ${expandedSections.playMode ? styles.expanded : ''}`}>
+            ▼
+          </span>
+        </div>
+        <div className={`${styles.accordionContent} ${expandedSections.playMode ? styles.expanded : ''}`}>
+          <div className={styles.radioGroup}>
+            <label className={styles.radioLabel}>
+              <input
+                type="radio"
+                name="playMode"
+                value="intro"
+                checked={playMode === 'intro'}
+                onChange={(e) => setPlayMode(e.target.value)}
+                className={styles.radioInput}
+              />
+              🎵 イントロから再生
+            </label>
+            <label className={styles.radioLabel}>
+              <input
+                type="radio"
+                name="playMode"
+                value="random"
+                checked={playMode === 'random'}
+                onChange={(e) => setPlayMode(e.target.value)}
+                className={styles.radioInput}
+              />
+              🎲 ランダムな場所から再生
+            </label>
+          </div>
+        </div>
       </div>
 
       {isClient && (
@@ -132,31 +228,6 @@ export default function ClassicQuiz() {
           />
         </div>
       )}
-
-      <div className={styles.radioGroup}>
-        <label className={styles.radioLabel}>
-          <input
-            type="radio"
-            name="playMode"
-            value="intro"
-            checked={playMode === 'intro'}
-            onChange={(e) => setPlayMode(e.target.value)}
-            className={styles.radioInput}
-          />
-          🎵 イントロから再生
-        </label>
-        <label className={styles.radioLabel}>
-          <input
-            type="radio"
-            name="playMode"
-            value="random"
-            checked={playMode === 'random'}
-            onChange={(e) => setPlayMode(e.target.value)}
-            className={styles.radioInput}
-          />
-          🎲 ランダムな場所から再生
-        </label>
-      </div>
 
       <div className={styles.buttonGroup}>
         <button onClick={generateNewQuestion} className={styles.button}>

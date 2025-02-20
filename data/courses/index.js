@@ -11,4 +11,10 @@ export const getAllSongs = () => {
 export const getSongsByCourse = (courseId) => {
   const course = courses.find(c => c.id === courseId);
   return course ? course.songs : [];
+};
+
+export const getComposersByCourse = (courseId) => {
+  const songs = courseId === 'all' ? getAllSongs() : getSongsByCourse(courseId);
+  const uniqueComposers = [...new Set(songs.map(song => song.composer))];
+  return ['all', ...uniqueComposers];
 }; 
