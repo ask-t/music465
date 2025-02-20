@@ -8,53 +8,65 @@ export default function ClassicQuiz() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [randomSong, setRandomSong] = useState(null);
   const [randomMovement, setRandomMovement] = useState(null);
-  const [randomUrl, setRandomUrl] = useState('');
+  const [videoId, setVideoId] = useState('');
+  const [startTime, setStartTime] = useState(0);
   const [isRandomTime, setIsRandomTime] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   const generateNewQuestion = (useRandomTime = false) => {
     const song = songs[Math.floor(Math.random() * songs.length)];
     const movement = song.movements[Math.floor(Math.random() * song.movements.length)];
     
-    // ランダムな時間を生成（楽章の開始時間から30秒後までの範囲で）
     const randomTimeOffset = useRandomTime 
       ? Math.floor(Math.random() * 30)
       : 0;
     
-    const url = `${song.url}&t=${movement.time + randomTimeOffset}s`;
+    const videoId = song.url.split('v=')[1];
+    const startTime = movement.time + randomTimeOffset;
     
     setRandomSong(song);
     setRandomMovement(movement);
-    setRandomUrl(url);
+    setVideoId(videoId);
+    setStartTime(startTime);
     setShowAnswer(false);
     setIsRandomTime(useRandomTime);
   };
 
   useEffect(() => {
+    setIsClient(true);
     generateNewQuestion(false);
   }, []);
 
-  if (!randomSong || !randomMovement) {
+  if (!isClient || !randomSong || !randomMovement) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.container}>
-      <h2>🎼 クラシック楽曲クイズ 🎼</h2>
-      <p>以下のリンクをクリックして、曲を聴いてください。作曲家・曲名・楽章を当てましょう！</p>
+      <h2 className={styles.title}>🎼 クラシック楽曲クイズ 🎼</h2>
+      <p className={styles.text}>以下の再生ボタンを押して、曲を聴いてください。作曲家・曲名・楽章を当てましょう！</p>
+
+      <div className={styles.audioWrapper}>
+        {isClient && (
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?start=${startTime}&autoplay=1`}
+            title="YouTube audio player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            className={styles.hiddenPlayer}
+          />
+        )}
+      </div>
 
       <div className={styles.buttonGroup}>
-        <a href={randomUrl} target="_blank" rel="noopener noreferrer" className={styles.link}>
-          🔊 {isRandomTime ? 'ランダムな場所から再生' : 'イントロから再生'}
-        </a>
         <button onClick={() => generateNewQuestion(false)} className={styles.button}>
-          🎵 イントロから始める
+          🎵 イントロから聴く
         </button>
         <button onClick={() => generateNewQuestion(true)} className={styles.button}>
-          🎲 ランダムな場所から始める
+          🎲 ランダムな場所から聴く
         </button>
       </div>
 
-      <p>
+      <p className={styles.text}>
         <button onClick={() => setShowAnswer(true)} className={styles.button}>
           ✅ 答えを見る
         </button>
@@ -65,7 +77,7 @@ export default function ClassicQuiz() {
           <strong>作曲家:</strong> {randomSong.composer} <br />
           <strong>曲名:</strong> {randomSong.title} <br />
           <strong>楽章:</strong> {randomMovement.name} <br />
-          <strong>開始時間:</strong> {randomMovement.time + (isRandomTime ? '+ ランダム' : '')} 秒
+          <strong>開始時間:</strong> {startTime} 秒
           <p>
             <button onClick={() => generateNewQuestion(isRandomTime)} className={styles.button}>
               🔄 次の問題へ
