@@ -25,9 +25,9 @@ export const songs = [
         title: "Piano Sonata No. 31 in A-flat major, op. 110",
         composer: "Ludwig van Beethoven",
         movements: [
-            { time: 0, name: "I. Moderato cantabile molto espressivo" },
-            { time: 458, name: "II. Allegro molto" },
-            { time: 613, name: "III. Adagio ma non troppo – Fuga: Allegro ma non troppo" }
+            { time: 0, name: "1st movement (Moderato cantabile molto espressivo)" },
+            { time: 458, name: "2nd movement (Allegro molto)" },
+            { time: 613, name: "3rd movement (Adagio ma non troppo – Fuga: Allegro ma non troppo)" }
         ]
     },
     { 
@@ -46,9 +46,9 @@ export const songs = [
         title: "Piano Sonata No. 13 in A major (Op. 120 / D.664)",
         composer: "Franz Schubert",
         movements: [
-            { time: 5, name: "Allegro moderato" },
-            { time: 667, name: "Andante" },
-            { time: 919, name: "Allegro" }
+            { time: 5, name: "1st movement (Allegro moderato)" },
+            { time: 667, name: "2nd movement (Andante)" },
+            { time: 919, name: "3rd movement (Allegro)" }
         ]
     },
     { 
