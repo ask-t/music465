@@ -204,3 +204,40 @@
 .accordionIcon.expanded {
   transform: rotate(180deg);
 }
+
+.selectorToggle {
+  margin: 1rem 0;
+  text-align: center;
+  background-color: #f0f8ff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1e8ff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.songSelectorPanel {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.songSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.activeButton {
+  background-color: #1890ff;
+  color: white;
+  border-color: #096dd9;
+}

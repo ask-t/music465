@@ -22,6 +22,10 @@ export default function ClassicQuiz() {
     composer: false,
     playMode: false
   });
+  const [selectedSong, setSelectedSong] = useState(null);
+  const [selectedMovementIndex, setSelectedMovementIndex] = useState(0);
+  const [isPlayingSelected, setIsPlayingSelected] = useState(false);
+  const [showSongSelector, setShowSongSelector] = useState(false);
 
   const composers = getComposersByCourse(selectedCourse);
 
@@ -83,6 +87,24 @@ export default function ClassicQuiz() {
       ...prev,
       [section]: !prev[section]
     }));
+  };
+
+  const toggleSongSelector = () => {
+    setShowSongSelector(!showSongSelector);
+    if (isPlayingSelected) {
+      setIsPlayingSelected(false);
+    }
+  };
+
+  const playSelectedSong = () => {
+    if (!selectedSong) return;
+    
+    const movement = selectedSong.movements[selectedMovementIndex];
+    const videoId = selectedSong.url.split('v=')[1];
+    
+    setVideoId(videoId);
+    setStartTime(movement.time);
+    setIsPlayingSelected(true);
   };
 
   useEffect(() => {
@@ -258,6 +280,65 @@ export default function ClassicQuiz() {
               🔄 次の問題へ
             </button>
           </p>
+        </div>
+      )}
+
+      <div className={styles.selectorToggle}>
+        <button 
+          onClick={toggleSongSelector} 
+          className={`${styles.button} ${showSongSelector ? styles.activeButton : ''}`}
+        >
+          🎵 曲を選択して再生
+        </button>
+      </div>
+
+      {showSongSelector && (
+        <div className={styles.songSelectorPanel}>
+          <h3>曲を選択</h3>
+          <div className={styles.songSelector}>
+            <select 
+              className={styles.select}
+              onChange={(e) => {
+                const songId = e.target.value;
+                const songs = getSongsByCourse(selectedCourse);
+                const song = songs.find(s => s.url === songId);
+                setSelectedSong(song);
+                setSelectedMovementIndex(0);
+              }}
+              value={selectedSong?.url || ''}
+            >
+              <option value="">曲を選択してください</option>
+              {getSongsByCourse(selectedCourse).map((song, idx) => (
+                <option key={idx} value={song.url}>
+                  {song.composer}: {song.title}
+                </option>
+              ))}
+            </select>
+            
+            {selectedSong && (
+              <>
+                <select 
+                  className={styles.select}
+                  onChange={(e) => setSelectedMovementIndex(Number(e.target.value))}
+                  value={selectedMovementIndex}
+                >
+                  {selectedSong.movements.map((movement, idx) => (
+                    <option key={idx} value={idx}>
+                      {movement.name} ({movement.key})
+                    </option>
+                  ))}
+                </select>
+                
+                <button 
+                  onClick={playSelectedSong} 
+                  className={styles.button}
+                  disabled={!selectedSong}
+                >
+                  ▶️ 選択した曲を再生
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
