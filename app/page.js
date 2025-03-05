@@ -226,7 +226,7 @@ export default function ClassicQuiz() {
                     onChange={() => setPlayMode('intro')}
                     className={styles.radioInput}
                   />
-                  冒頭から再生
+                  🎵 イントロから再生
                 </label>
                 
                 <label className={styles.radioLabel}>
@@ -238,7 +238,7 @@ export default function ClassicQuiz() {
                     onChange={() => setPlayMode('random')}
                     className={styles.radioInput}
                   />
-                  ランダムな位置から再生
+                  🎲 ランダムな場所から再生
                 </label>
               </div>
             )}
