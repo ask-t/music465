@@ -23,6 +23,7 @@
   display: flex;
   gap: 0.75rem;
   margin: 0.75rem 0;
+  justify-content: center;
 }
 
 .button {
@@ -79,15 +80,12 @@
 }
 
 .answer {
-  font-size: 0.95rem;
-  color: #4a5568;
-  border: 1px solid #e2e8f0;
-  padding: 0.8rem;
-  width: fit-content;
-  margin-top: 0.75rem;
-  background-color: #f7fafc;
-  border-radius: 3px;
-  line-height: 1.5;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  border: 1px solid #e0e0ff;
+  line-height: 1.6;
 }
 
 .title {
@@ -119,19 +117,14 @@
 }
 
 .radioLabel {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem;
   cursor: pointer;
-  color: #4a5568;
-  font-size: 0.9rem;
 }
 
 .radioInput {
-  cursor: pointer;
-  width: 1rem;
-  height: 1rem;
-  accent-color: #718096;
+  margin-right: 0.5rem;
 }
 
 .quoteContainer {
@@ -145,29 +138,17 @@
 
 .quote {
   font-style: italic;
-  color: #4a5568;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 0;
-  position: relative;
-}
-
-.quote::before {
-  content: '"';
-  font-size: 2rem;
-  color: #718096;
-  opacity: 0.3;
-  position: absolute;
-  left: -1rem;
-  top: -0.5rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  border-left: 4px solid #8080ff;
 }
 
 .quoteAuthor {
-  margin-top: 0.75rem;
-  color: #718096;
-  font-weight: 500;
   text-align: right;
-  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
 }
 
 .accordionHeader {
@@ -240,4 +221,110 @@
   background-color: #1890ff;
   color: white;
   border-color: #096dd9;
+}
+
+.quizSection {
+  background-color: #f5f5ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0ff;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.quizTitle {
+  color: #4a5568;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.settingsSection {
+  background-color: #f0f0ff;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e6e6ff;
+}
+
+.settingRow {
+  margin-bottom: 0.75rem;
+}
+
+.settingButton {
+  background-color: #e6e6ff;
+  border: 1px solid #d1d1ff;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.settingButton:hover {
+  background-color: #d1d1ff;
+}
+
+.settingOptions {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #e6e6ff;
+}
+
+.radioLabel,
+.checkboxLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+.radioInput,
+.checkboxInput {
+  margin-right: 0.5rem;
+}
+
+.quote {
+  font-style: italic;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  border-left: 4px solid #8080ff;
+}
+
+.quoteAuthor {
+  text-align: right;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+  justify-content: center;
+}
+
+.answer {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  border: 1px solid #e0e0ff;
+  line-height: 1.6;
+}
+
+.quoteOutside {
+  font-style: italic;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  border-left: 4px solid #8080ff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
