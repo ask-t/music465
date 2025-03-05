@@ -188,7 +188,7 @@ export default function ClassicQuiz() {
                     onChange={() => handleComposerChange('all')}
                     className={styles.checkboxInput}
                   />
-                  すべての作曲家
+                  🉐すべての作曲家
                 </label>
                 
                 {composers.map(composer => (
