@@ -13,6 +13,7 @@ export default function SongsList() {
   const [isClient, setIsClient] = useState(false);
   const [composers, setComposers] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
+  const [basePath, setBasePath] = useState('');
 
   useEffect(() => {
     const allSongs = getAllSongs();
@@ -22,6 +23,13 @@ export default function SongsList() {
     // 作曲家のリストを作成
     const uniqueComposers = [...new Set(allSongs.map(song => song.composer))];
     setComposers(['all', ...uniqueComposers]);
+    
+    // ホスト名に基づいてbasePath（ベースパス）を設定
+    if (typeof window !== 'undefined') {
+      const isAskTHost = window.location.hostname === 'ask-t.vercel.app';
+      setBasePath(isAskTHost ? '/music465' : '');
+      console.log(`Setting basePath: ${isAskTHost ? '/music465' : ''} for host: ${window.location.hostname}`);
+    }
     
     setIsClient(true);
   }, []);
@@ -62,7 +70,7 @@ export default function SongsList() {
       <h1 className={styles.title}>🎹 曲リスト 🎹</h1>
       
       <div className={styles.navigation}>
-        <Link href="/" className={styles.navLink}>
+        <Link href={`${basePath}/`} className={styles.navLink}>
           ← クイズページに戻る
         </Link>
       </div>
