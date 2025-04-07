@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getAllSongs } from '@/data/courses';
 import styles from './songs.module.css';
-import Link from 'next/link';
+import CustomLink from '../components/CustomLink';
 
 export default function SongsList() {
   const [songs, setSongs] = useState([]);
@@ -70,9 +70,9 @@ export default function SongsList() {
       <h1 className={styles.title}>🎹 曲リスト 🎹</h1>
       
       <div className={styles.navigation}>
-        <Link href={`${basePath}/`} className={styles.navLink}>
+        <CustomLink href="/" className={styles.navLink}>
           ← クイズページに戻る
-        </Link>
+        </CustomLink>
       </div>
 
       <div className={styles.filterSection}>

@@ -5,7 +5,7 @@ import { songs } from '@/data/songs';
 import styles from './page.module.css';
 import { courses, getAllSongs, getSongsByCourse, getComposersByCourse } from '@/data/courses';
 import { quotes, getRandomQuote } from '@/data/quotes';
-import Link from 'next/link';
+import CustomLink from './components/CustomLink';
 
 export default function ClassicQuiz() {
   const [showAnswer, setShowAnswer] = useState(false);
@@ -100,9 +100,9 @@ export default function ClassicQuiz() {
     <div className={styles.container}>
       <h2 className={styles.title}>🎼 Keyboard Literature Quiz 🎼</h2>
       <div className={styles.navigation}>
-        <Link href="/songs" className={styles.navLink}>
+        <CustomLink href="/songs" className={styles.navLink}>
           曲リストページへ 🎵
-        </Link>
+        </CustomLink>
       </div>
       <p className={styles.text}>以下の再生ボタンを押して、曲を聴いてください。作曲家・曲名・楽章を当てましょう🐧🐧🐧</p>
       <br></br>
